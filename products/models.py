@@ -13,7 +13,7 @@ class Product(models.Model):
     en_name = models.CharField(max_length=200)
     description = models.TextField()
     category = models.ForeignKey(Category , on_delete=models.PROTECT, null=True)
-    # image1 = models.ImageField(upload_to='%Y/%m')
+    image1 = models.ImageField(upload_to='products/%Y/%m', default = 'products/defaultimage.jpg')
     # image2 = models.ImageField(upload_to='%Y/%m')
     # image3 = models.ImageField(upload_to='%Y/%m')
     date_added = models.DateTimeField(auto_now_add=True,auto_now=False)
