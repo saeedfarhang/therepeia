@@ -8,6 +8,7 @@ import Dashboard from "./admin/Dashboard";
 import Login from "./Login";
 import Logout from "./Logout";
 import ProductAction from "./admin/ProductAction/ProductAction";
+import CategoryAction from "./admin/ProductAction/AddCategory";
 import { axiosInstance } from "../axios";
 import { UserId } from "../UserState";
 
@@ -41,11 +42,14 @@ export default function Routing() {
               component={ProductAction}
             />
             <Route path="/admin/product/add" exact component={ProductAction} />
+            <Route
+              path="/admin/category/add"
+              exact
+              component={CategoryAction}
+            />
           </Switch>
         </Router>
-      ) : (
-        console.log("not")
-      )}
+      ) : null}
 
       {/* <Footer /> */}
     </Fragment>

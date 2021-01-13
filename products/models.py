@@ -16,7 +16,7 @@ class Category(models.Model):
 class Product(models.Model):
     fa_name = models.CharField(max_length=200)
     en_name = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     technical_info = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category , on_delete=models.PROTECT, null=True)
     image1 = models.ImageField(upload_to='products/%Y/%m', default = 'products/defaultimage.jpg')

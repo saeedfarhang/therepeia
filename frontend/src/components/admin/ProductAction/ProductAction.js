@@ -1,5 +1,10 @@
 import {
   Collapse,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Grid,
   InputLabel,
@@ -21,7 +26,7 @@ import { useForm } from "react-hook-form";
 import { Add } from "@material-ui/icons";
 import axios from "axios";
 import InputField from "../../CustomComponents/InputField";
-
+import AddCategory from "./AddCategory";
 const useStyle = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -63,7 +68,6 @@ export default function AddProduct({ match }) {
     }
   }, [mode]);
 
-  console.log(product);
   const history = useHistory();
   const classes = useStyle();
   const [categories, setCategory] = useState([{ id: "1" }, { id: "2" }]);
@@ -72,7 +76,7 @@ export default function AddProduct({ match }) {
     axiosInstance.get("products/category/").then((res) => {
       setCategory(res.data);
     });
-  }, []);
+  }, ["products/category/"]);
 
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -103,6 +107,16 @@ export default function AddProduct({ match }) {
       return;
     }
     return technicalInfoDic;
+  };
+
+  const [AddCategoryOpen, setAddCategoryOpen] = useState(false);
+
+  const handleAddCategory = () => {
+    setAddCategoryOpen(true);
+  };
+
+  const handleClose = () => {
+    setAddCategoryOpen(false);
   };
 
   useEffect(() => {
@@ -370,7 +384,7 @@ export default function AddProduct({ match }) {
                   />
                 </Collapse>
 
-                <Grid container justify="center">
+                <Grid container justify="center" alignItems="center">
                   <InputField
                     className={classes.select}
                     id="is_published"
@@ -405,6 +419,26 @@ export default function AddProduct({ match }) {
                       </MenuItem>
                     ))}
                   </InputField>
+                  <IconButton icon={<Add />} onClick={handleAddCategory} />
+                  <Dialog
+                    open={AddCategoryOpen}
+                    onClose={handleClose}
+                    aria-labelledby="form-dialog-title"
+                  >
+                    <DialogTitle id="form-dialog-title">
+                      افزودن دسته بندی
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText>
+                        از طریق فرم زیر میتوانید دسته بندی خود را اضافه کنید.
+                        برای حذف یا تغییر دسته بندی، از داشبورد اقدام کنید.
+                      </DialogContentText>
+                      <AddCategory />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose} text="انصراف" />
+                    </DialogActions>
+                  </Dialog>
                 </Grid>
               </Grid>
 

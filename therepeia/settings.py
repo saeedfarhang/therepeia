@@ -87,6 +87,15 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': "therepei_postgres",
+#         'USER':"therepei_therepei",
+#         'PASSWORD':"M7vQ1a1sX.e]Y7",
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -131,6 +140,12 @@ STATIC_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT = '/home/therepei/public_html/static/'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = '/home/therepei/public_html/media'
+
 
 
 REST_FRAMEWORK = {
