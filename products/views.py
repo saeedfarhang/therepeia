@@ -61,7 +61,7 @@ class ProductsViewSet(viewsets.ViewSet):
     parser_classes = [MultiPartParser, FormParser]
 
     def list(self,request):
-        product_queryset = Product.get_published(Product)
+        product_queryset = Product.objects.all()
         product_serializer = ProductSerializer(product_queryset, many=True)
         return Response(product_serializer.data)
 

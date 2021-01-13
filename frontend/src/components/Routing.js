@@ -7,8 +7,7 @@ import Footer from "./Footer";
 import Dashboard from "./admin/Dashboard";
 import Login from "./Login";
 import Logout from "./Logout";
-import Edit from "./admin/ProductAction/Edit";
-import Add from "./admin/ProductAction/Add";
+import ProductAction from "./admin/ProductAction/ProductAction";
 import { axiosInstance } from "../axios";
 import { UserId } from "../UserState";
 
@@ -36,8 +35,12 @@ export default function Routing() {
         <Router forceRefresh={true}>
           <Switch>
             <Route path="/admin" exact component={Dashboard} />
-            <Route path="/admin/product/edit/:id" exact component={Edit} />
-            <Route path="/admin/product/add" exact component={Add} />
+            <Route
+              path="/admin/product/edit/:id"
+              exact
+              component={ProductAction}
+            />
+            <Route path="/admin/product/add" exact component={ProductAction} />
           </Switch>
         </Router>
       ) : (

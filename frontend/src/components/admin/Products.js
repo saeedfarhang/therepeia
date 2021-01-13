@@ -49,7 +49,9 @@ export default function Orders() {
 
   function Delete(id) {
     if (confirm("are you sure?")) {
-      axiosInstance.delete(`products/product/${id}/`);
+      axiosInstance
+        .delete(`products/product/${id}/`)
+        .then((res) => location.reload());
     } else {
       return;
     }
