@@ -65,11 +65,11 @@ export default function Orders() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>اسم</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Date</TableCell>
+            <TableCell>اسم فارسی</TableCell>
+            <TableCell>اسم انگلیسی</TableCell>
+            <TableCell>تاریح</TableCell>
             {/* <TableCell>category</TableCell> */}
-            <TableCell>action</TableCell>
+            <TableCell>عملیات</TableCell>
             <TableCell>image</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
