@@ -23,10 +23,14 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { axiosInstance } from "../../../axios";
 import { useForm } from "react-hook-form";
-import { Add } from "@material-ui/icons";
+import { Add, Description } from "@material-ui/icons";
 import axios from "axios";
 import InputField from "../../CustomComponents/InputField";
 import AddCategory from "./AddCategory";
+import ExcelAdd from "./ExcelAdd";
+import PropTypes from "prop-types";
+import NumberFormat from "react-number-format";
+
 const useStyle = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -50,6 +54,34 @@ const useStyle = makeStyles((theme) => ({
     margin: 4,
   },
 }));
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix=""
+    />
+  );
+}
+
+NumberFormatCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default function AddProduct({ match }) {
   const [mode, setMode] = useState("");
@@ -117,6 +149,7 @@ export default function AddProduct({ match }) {
 
   const handleClose = () => {
     setAddCategoryOpen(false);
+    setExcelAdd(false);
   };
 
   useEffect(() => {
@@ -167,6 +200,7 @@ export default function AddProduct({ match }) {
     formData.append("technical_info", Data.technical_info);
     formData.append("description", Data.description);
     formData.append("category", Data.category);
+    formData.append("price", Data.price);
     console.log(Data.category, Data.fa_name);
     formData.append("is_published", Data.is_published);
 
@@ -266,12 +300,37 @@ export default function AddProduct({ match }) {
     setAddImage((state) => !state);
   };
 
+  const [excelAdd, setExcelAdd] = useState(false);
+  const handleExcelBtn = () => {
+    setExcelAdd((state) => !state);
+  };
+
   return (
     <div className={classes.root}>
       <Grid>
         <Paper className={classes.paper}>
           {product.loaded ? (
             <form onSubmit={handleSubmit(onSubmit)}>
+              <Button
+                text="افزودن با اکسل"
+                startIcon={<Description />}
+                color="secondary"
+                onClick={handleExcelBtn}
+              />
+              <Dialog open={excelAdd} onClose={handleClose}>
+                <DialogTitle>افزودن با فایل اکسل</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    از طریق فرم زیر میتوانید محصولات خود را به وسیله فایل اکسل
+                    ایجاد کنید. فرمت های مورد قبول: .xslx
+                  </DialogContentText>
+                  <ExcelAdd />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} type="file" text="انصراف" />
+                </DialogActions>
+              </Dialog>
+              <Divider variant="middle" style={{ margin: 10 }} />
               <Typography variant="h6">اطلاعات محصول</Typography>
               <Grid container direction="column" justify="center">
                 <Grid container item>
@@ -299,6 +358,7 @@ export default function AddProduct({ match }) {
                     inputRef={register({
                       required: "این فیلد نمیتواند خالی باشد",
                     })}
+                    helperText="این فیلد را به صورت زیر پر کنید: مشخصه:دیتا-مشخصه2:دیتا-مشخصه3:دیتا..."
                     type="text"
                     name="technical_info"
                     label="توضیحات فنی محصول"
@@ -326,6 +386,18 @@ export default function AddProduct({ match }) {
                     defaultValue={
                       product.data ? product.data.description : null
                     }
+                  />
+
+                  <TextField
+                    inputRef={register({
+                      required: "این فیلد نمیتواند خالی باشد",
+                    })}
+                    name="price"
+                    label="قیمت"
+                    InputProps={{
+                      inputComponent: NumberFormatCustom,
+                    }}
+                    defaultValue={product.data ? product.data.price : null}
                   />
                 </Grid>
               </Grid>
@@ -441,7 +513,6 @@ export default function AddProduct({ match }) {
                   </Dialog>
                 </Grid>
               </Grid>
-
               <Button type="submit" text="افزودن" />
             </form>
           ) : null}

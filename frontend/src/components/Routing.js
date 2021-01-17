@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 // import AdminView from './admin/AdminView'
 import Dashboard from "./admin/Dashboard";
+import ProductPage from "./admin/pages/ProductPage";
 import Login from "./Login";
 import Logout from "./Logout";
 import ProductAction from "./admin/ProductAction/ProductAction";
@@ -36,6 +37,7 @@ export default function Routing() {
         <Router forceRefresh={true}>
           <Switch>
             <Route path="/admin" exact component={Dashboard} />
+            <Route path="/admin/products" exact component={ProductPage} />
             <Route
               path="/admin/product/edit/:id"
               exact

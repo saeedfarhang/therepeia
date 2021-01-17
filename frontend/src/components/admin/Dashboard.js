@@ -19,7 +19,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
-import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Products from "./Products";
 import { useHistory } from "react-router-dom";
@@ -151,7 +150,7 @@ export default function Dashboard() {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            داشبورد مدیریت
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={88} color="secondary">

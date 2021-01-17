@@ -5,6 +5,7 @@ from .serializers import ProductSerializer, CategorySerializer
 from rest_framework import permissions
 from .models import Product, Category
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.views import APIView
 
 class ReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -67,7 +68,7 @@ class ProductsViewSet(viewsets.ViewSet):
 
     
     def retrieve(self,request,pk):
-        product_queryset = Product.get_published(Product).get(pk=pk)
+        product_queryset = Product.objects.get(pk=pk)
         product_serializer = ProductSerializer(product_queryset)
         cat = product_queryset.category
         category_serializer = CategorySerializer(cat)
@@ -84,14 +85,6 @@ class ProductsViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
-        # category = Category.objects.get(pk=data['category'])
-        # product = Product.objects.get_or_create(
-        #     fa_name = data['fa_name'],
-        #     en_name = data['en_name'],
-        #     description = data['description'],
-        #     category = category,
-        # )
-        # return Response({'success':'object been created'})
 
     def destroy(self, request, pk):
         product = Product.objects.get(pk=pk).delete()
@@ -109,13 +102,40 @@ class ProductsViewSet(viewsets.ViewSet):
         else:
             return Response(serializer.errors)
             
-        # product.update(
-        #     fa_name = data['fa_name'],
-        #     en_name = data['en_name'],
-        #     description = data['description'],
-        #     category = category,
-        #     image1 = data['image1'],
-        # )
-        
-        # return Response({'success':'object been updated'})
 
+class ProductSearchView(APIView):
+    def get(self, request):
+        searchin = request.GET.get('in', None)
+        query = request.GET.get('q', None)
+        print(searchin,' ',query)
+        if searchin == 'fa_name':
+            queryset = Product.objects.filter(fa_name__contains=query)
+            serializer = ProductSerializer(queryset, many=True)
+            return Response(serializer.data)
+        if searchin == 'en_name':
+            queryset = Product.objects.filter(en_name__contains=query)
+            serializer = ProductSerializer(queryset, many=True)
+            return Response(serializer.data)
+        if searchin == 'description':
+            queryset = Product.objects.filter(description__contains=query)
+            serializer = ProductSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+from .exceltojson import excel2json
+
+import pandas
+import json
+class ExcelProduct(APIView):
+    def post(self, request):
+        data = request.data
+        dd = json.loads(pandas.read_excel(data['file'].file).to_json(orient='index'))
+        for key in dd:
+            # print(dd[key])
+            data = dd[key]
+            serializer = ProductSerializer(data = data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(serializer.errors)
+        
+        return Response(serializer.data)

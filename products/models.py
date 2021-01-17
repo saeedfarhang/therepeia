@@ -19,6 +19,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     technical_info = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category , on_delete=models.PROTECT, null=True)
+    price=models.CharField(default='0',max_length=10)
     image1 = models.ImageField(upload_to='products/%Y/%m', default = 'products/defaultimage.jpg')
     image2 = models.ImageField(upload_to='products/%Y/%m', null=True, blank=True)
     image3 = models.ImageField(upload_to='products/%Y/%m', null=True, blank=True)
