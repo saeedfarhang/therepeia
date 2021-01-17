@@ -70,7 +70,7 @@ export default function Orders() {
             <TableCell>تاریح</TableCell>
             {/* <TableCell>category</TableCell> */}
             <TableCell>عملیات</TableCell>
-            <TableCell>image</TableCell>
+            <TableCell>تصویر</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
