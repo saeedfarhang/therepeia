@@ -7,12 +7,19 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Button from "../../CustomComponents/Button";
-import TextField from "../../CustomComponents/TextField";
+import Notification from "../../CustomComponents/Notification";
 
 export default function ExcelAdd(props) {
   const [uploading, setuploading] = useState(false);
   const [uploadfile, setuploadFile] = useState(false);
+  const history = useHistory();
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
 
   const handleChange = (e) => {
     setuploadFile(e.target.files);
@@ -53,9 +60,22 @@ export default function ExcelAdd(props) {
         }
       },
     };
-    axios(config).then((res) => {
-      console.log(res.data);
-    });
+    axios(config)
+      .then((res) => {
+        setNotify({
+          isOpen: true,
+          message: `ایتم های ${res.data} ایجاد شدند`,
+          type: "success",
+        });
+        history.push("/admin");
+      })
+      .catch((error) => {
+        setNotify({
+          isOpen: true,
+          message: "مشکلی وجود دارد. فایل انتخاب شده را بررسی کنید",
+          type: "error",
+        });
+      });
   };
   return (
     <div>
@@ -63,6 +83,7 @@ export default function ExcelAdd(props) {
         <input type="file" onChange={handleChange} />
         <Button type="submit" text="ثبت" />
       </form>
+      <Notification notify={notify} setNotify={setNotify} />
     </div>
   );
 }

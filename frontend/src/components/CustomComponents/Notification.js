@@ -31,3 +31,25 @@ export default function Notification(props) {
     </Snackbar>
   );
 }
+
+/* after import Notifications from CustomComponents:
+  add this state to component:
+
+    const [notify, setNotify] = useState({
+      isOpen: false,
+      message: "",
+      type: "",
+    });
+
+  and use this to open it:
+
+    setNotify({
+      isOpen: true,
+      message: "مشکلی وجود دارد",
+      type: "error",
+    });
+
+  then add this in component return:
+
+    <Notification notify={notify} setNotify={setNotify} />
+  */

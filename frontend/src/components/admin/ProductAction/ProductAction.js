@@ -355,9 +355,7 @@ export default function AddProduct({ match }) {
                 <Typography variant="body2">مشخصات فنی</Typography>
                 <Grid item style={{ width: "100%" }}>
                   <TextField
-                    inputRef={register({
-                      required: "این فیلد نمیتواند خالی باشد",
-                    })}
+                    inputRef={register()}
                     helperText="این فیلد را به صورت زیر پر کنید: مشخصه:دیتا-مشخصه2:دیتا-مشخصه3:دیتا..."
                     type="text"
                     name="technical_info"
@@ -374,9 +372,7 @@ export default function AddProduct({ match }) {
                 <Typography variant="body2">متن توضیحات</Typography>
                 <Grid item style={{ width: "100%" }}>
                   <TextField
-                    inputRef={register({
-                      required: "این فیلد نمیتواند خالی باشد",
-                    })}
+                    inputRef={register()}
                     type="text"
                     name="description"
                     label="متن توضیحات محصول"

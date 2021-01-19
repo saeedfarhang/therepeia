@@ -6,6 +6,8 @@ from rest_framework import permissions
 from .models import Product, Category
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 
 class ReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -55,14 +57,25 @@ class CategoryViewSet(viewsets.ViewSet):
         return Response({'success':'category been deleted'})
 
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+class ProductsList(ListAPIView):
+    queryset = Product.objects.all().order_by('-date_added')
+    serializer_class = ProductSerializer
+    pagination_class = StandardResultsSetPagination
+    
 
 
 class ProductsViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAdminUser|ReadOnly]
     parser_classes = [MultiPartParser, FormParser]
 
+
     def list(self,request):
-        product_queryset = Product.objects.all()
+        product_queryset = Product.objects.all().order_by('-date_added')
         product_serializer = ProductSerializer(product_queryset, many=True)
         return Response(product_serializer.data)
 
@@ -121,21 +134,41 @@ class ProductSearchView(APIView):
             serializer = ProductSerializer(queryset, many=True)
             return Response(serializer.data)
 
-from .exceltojson import excel2json
-
-import pandas
+from .excel_to_dict import excel_to_dict
 import json
 class ExcelProduct(APIView):
     def post(self, request):
         data = request.data
-        dd = json.loads(pandas.read_excel(data['file'].file).to_json(orient='index'))
-        for key in dd:
-            # print(dd[key])
-            data = dd[key]
-            serializer = ProductSerializer(data = data)
+        serializer_data = []
+        items_en_name = []
+        try:
+            dd = excel_to_dict(data['file'].file)
+        except expression as e:
+            return(e)
+        
+        for item in dd:
+            
+            serializer = ProductSerializer(data = item)
             if serializer.is_valid():
                 serializer.save()
+                serializer_data.append(serializer.data)
             else:
                 return Response(serializer.errors)
         
-        return Response(serializer.data)
+
+        for item in serializer_data:
+            items_en_name.append(item['en_name'])
+
+        return Response(items_en_name)
+
+
+        # for key in dd:
+        #     print(dd[key])
+        #     # data = dd[key]
+        #     serializer = ProductSerializer(data = data)
+        #     if serializer.is_valid():
+        #         serializer.save()
+        #     else:
+        #         return Response(serializer.errors)
+        
+        # return Response(serializer.data)

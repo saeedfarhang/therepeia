@@ -20,7 +20,7 @@ export default function ProductPage() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Products />
+        <Products page={true} />
       </Paper>
     </div>
   );
