@@ -73,12 +73,6 @@ class ProductsViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAdminUser|ReadOnly]
     parser_classes = [MultiPartParser, FormParser]
 
-
-    def list(self,request):
-        product_queryset = Product.objects.all().order_by('-date_added')
-        product_serializer = ProductSerializer(product_queryset, many=True)
-        return Response(product_serializer.data)
-
     
     def retrieve(self,request,pk):
         product_queryset = Product.objects.get(pk=pk)
@@ -87,7 +81,6 @@ class ProductsViewSet(viewsets.ViewSet):
         category_serializer = CategorySerializer(cat)
         return Response({"product":product_serializer.data,"category":category_serializer.data})
         # return Response()
-
 
 
     def create(self, request):
